@@ -1,54 +1,92 @@
-var draw = false;
+const DEFAULT_COLOR = "#333333";
+const DEFAULT_MODE = "pen";
+const DEFAULT_SIZE = 50;
 
-document.getElementsByClassName("container")[0].addEventListener("mousedown", () => (draw = true));
-document.getElementsByClassName("container")[0].addEventListener("drag", () => (draw = true));
-document.getElementsByClassName("container")[0].addEventListener("mouseup", () => (draw = false));
+let currentColor = DEFAULT_COLOR;
+let currentMode = DEFAULT_MODE;
+let currentSize = DEFAULT_SIZE;
 
-function initial(size) {
+function setCurrentColor(newColor) {
+  currentColor = newColor;
+}
+
+function setCurrentMode(newMode) {
+  activateButton(newMode);
+  currentMode = newMode;
+}
+
+////function setCurrentSize(newSize) {
+//  currentSize = newSize;
+//}
+
+const colorPicker = document.getElementById("colorPicker");
+const colorBtn = document.getElementById("colorBtn");
+const rainbowBtn = document.getElementById("rainbowBtn");
+const eraserBtn = document.getElementById("eraserBtn");
+const resetBtn = document.getElementById("resetBtn");
+const sizeValue = document.getElementById("sizeValue");
+const sizeSlider = document.getElementById("sizeSlider");
+const container = document.getElementById("container");
+
+colorPicker.onchange = (e) => setCurrentColor(e.target.value);
+colorBtn.onclick = () => setCurrentMode("pen");
+rainbowBtn.onclick = () => setCurrentMode("rainbow");
+eraserBtn.onclick = () => setCurrentMode("eraser");
+resetBtn.onclick = () => reset();
+//sizeSlider.onmousemove = (e) => updateSizeValue(e.target.value);
+//sizeSlider.onchange = (e) => changeSize(e.target.value);
+
+let mouseDown = false;
+document.body.onmousedown = () => (mouseDown = true);
+document.body.onmouseup = () => (mouseDown = false);
+
+document.getElementById("resetBtn").addEventListener("click", reset);
+
+function createPixel(size) {
   for (let i = 0; i < size; i++) {
     for (let j = 0; j < size; j++) {
       const div = document.createElement("div");
       div.className = "box";
-      document.getElementsByClassName("container")[0].appendChild(div);
-      div.addEventListener("mouseover", function (event) {
-        if (draw) event.target.style.backgroundColor = randomRGB();
-      });
+      div.addEventListener("mouseover", changeColor);
+      div.addEventListener("mousedown", changeColor);
+      container.appendChild(div);
     }
   }
 }
-initial(125);
 
-function deleteChild(e) {
-  //e.firstElementChild can be used.
-  var child = e.lastElementChild;
-  while (child) {
-    e.removeChild(child);
-    child = e.lastElementChild;
-  }
+function changeColor(e) {
+  if (e.type === "mouseover" && !mouseDown) return;
+  e.target.style.backgroundColor = currentColor;
 }
 
-var black = 1;
-
 function randomRGB() {
-  let r = Math.floor(Math.random() * 25) * 10;
-  let g = Math.floor(Math.random() * 25) * 10;
-  let b = Math.floor(Math.random() * 25) * 10;
-  black -= 0.1;
-  if (black < 0) {
-    black = 0.9;
-  }
-  return `rgb(${r}, ${g}, ${b}, ${black})`;
+  let r = Math.floor(Math.random() * 25);
+  let g = Math.floor(Math.random() * 25);
+  let b = Math.floor(Math.random() * 25);
+  return `rgb(${r}, ${g}, ${b})`;
 }
 
 function reset() {
-  var e = document.getElementsByClassName("container")[0];
-  deleteChild(e);
-  let userSelection = parseInt(prompt("Please enter your size", ""));
-  while (userSelection > 100 || userSelection <= 0) {
-    userSelection = parseInt(prompt("Please enter 1 - 100", ""));
-  }
-  e.style.width = `${userSelection * 16}px`;
-  initial(userSelection);
+  container.innerHTML = "";
+  createPixel(currentSize);
 }
 
-document.getElementById("resetBtn").addEventListener("click", reset);
+function activateButton(newMode) {
+  if (currentMode === "rainbow") {
+    rainbowBtn.classList.remove("active");
+  } else if (currentMode === "color") {
+    colorBtn.classList.remove("active");
+  } else if (currentMode === "eraser") {
+    eraserBtn.classList.remove("active");
+  }
+
+  if (newMode === "rainbow") {
+    rainbowBtn.classList.add("active");
+  } else if (newMode === "color") {
+    colorBtn.classList.add("active");
+  } else if (newMode === "eraser") {
+    eraserBtn.classList.add("active");
+  }
+}
+
+createPixel(currentSize);
