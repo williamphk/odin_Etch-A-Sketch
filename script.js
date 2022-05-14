@@ -39,6 +39,7 @@ resetBtn.onclick = () => reset();
 let mouseDown = false;
 container.onmousedown = () => (mouseDown = true);
 document.onmouseup = () => (mouseDown = false);
+container.addEventListener("contextmenu", (event) => event.preventDefault());
 
 document.getElementById("resetBtn").addEventListener("click", reset);
 
@@ -56,6 +57,7 @@ function createPixel(size) {
 
 function changeColor(e) {
   if (e.type === "mouseover" && !mouseDown) return;
+  if (e.button === 2 || e.button === 1) return;
   e.target.style.backgroundColor = currentColor;
 }
 
