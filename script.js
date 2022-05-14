@@ -37,7 +37,10 @@ resetBtn.onclick = () => reset();
 //sizeSlider.onchange = (e) => changeSize(e.target.value);
 
 let mouseDown = false;
-container.onmousedown = () => (mouseDown = true);
+container.onmousedown = function (e) {
+  if (e.button != 0) return;
+  mouseDown = true;
+};
 document.onmouseup = () => (mouseDown = false);
 container.addEventListener("contextmenu", (event) => event.preventDefault());
 
@@ -58,14 +61,16 @@ function createPixel(size) {
 function changeColor(e) {
   if (e.type === "mouseover" && !mouseDown) return;
   if (e.button === 2 || e.button === 1) return;
-  e.target.style.backgroundColor = currentColor;
-}
-
-function randomRGB() {
-  let r = Math.floor(Math.random() * 25);
-  let g = Math.floor(Math.random() * 25);
-  let b = Math.floor(Math.random() * 25);
-  return `rgb(${r}, ${g}, ${b})`;
+  if (currentMode === "rainbow") {
+    const randomR = Math.floor(Math.random() * 256);
+    const randomG = Math.floor(Math.random() * 256);
+    const randomB = Math.floor(Math.random() * 256);
+    e.target.style.backgroundColor = `rgb(${randomR}, ${randomG}, ${randomB})`;
+  } else if (currentMode === "pen") {
+    e.target.style.backgroundColor = currentColor;
+  } else if (currentMode === "eraser") {
+    e.target.style.backgroundColor = "#fefefe";
+  }
 }
 
 function reset() {
@@ -76,7 +81,7 @@ function reset() {
 function activateButton(newMode) {
   if (currentMode === "rainbow") {
     rainbowBtn.classList.remove("active");
-  } else if (currentMode === "color") {
+  } else if (currentMode === "pen") {
     colorBtn.classList.remove("active");
   } else if (currentMode === "eraser") {
     eraserBtn.classList.remove("active");
@@ -84,7 +89,7 @@ function activateButton(newMode) {
 
   if (newMode === "rainbow") {
     rainbowBtn.classList.add("active");
-  } else if (newMode === "color") {
+  } else if (newMode === "pen") {
     colorBtn.classList.add("active");
   } else if (newMode === "eraser") {
     eraserBtn.classList.add("active");
