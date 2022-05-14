@@ -38,7 +38,7 @@ resetBtn.onclick = () => reset();
 
 let mouseDown = false;
 document.body.onmousedown = () => (mouseDown = true);
-document.body.onmouseup = () => (mouseDown = false);
+document.onmouseup = () => (mouseDown = false);
 
 document.getElementById("resetBtn").addEventListener("click", reset);
 

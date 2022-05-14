@@ -1,3 +1,7 @@
+html {
+    min-height: 100%;
+}
+
 .title {
     text-align: center;
     font-size: 50px;
