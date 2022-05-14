@@ -37,7 +37,7 @@ resetBtn.onclick = () => reset();
 //sizeSlider.onchange = (e) => changeSize(e.target.value);
 
 let mouseDown = false;
-document.body.onmousedown = () => (mouseDown = true);
+container.onmousedown = () => (mouseDown = true);
 document.onmouseup = () => (mouseDown = false);
 
 document.getElementById("resetBtn").addEventListener("click", reset);
