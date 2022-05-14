@@ -1,0 +1,53 @@
+.title {
+    text-align: center;
+    font-size: 50px;
+}
+
+.main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 70px;
+}
+
+.settings {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap:30px;
+  }
+
+button {
+    padding: 10px 20px;
+    border-radius: 5px;
+  }
+
+button.active {
+    background-color: black;
+    color: white;
+}
+
+button,
+input[type='color'] {
+    transition: transform 0.2s ease-in-out;
+}
+
+button:hover,
+input[type='color']:hover {
+    transform: scale(1.05);
+}
+
+.container {
+    width: 500px;
+    display: flex;
+    flex-wrap: wrap;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+}
+
+.box {
+    width: 4px;
+    height: 4px;
+    background-color: white;
+}
